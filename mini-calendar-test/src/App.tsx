@@ -1,26 +1,22 @@
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
-import './index.css';
-import { useControllableValue } from 'ahooks';
+import React, { useEffect, useImperativeHandle, useRef, useState } from "react";
+import "./index.css";
+import { useControllableValue } from "ahooks";
 
 interface CalendarProps {
-  value?: Date,
-  defaultValue?: Date,
-  onChange?: (date: Date) => void
+  value?: Date;
+  defaultValue?: Date;
+  onChange?: (date: Date) => void;
 }
 
 interface CalendarRef {
-  getDate: () => Date,
-  setDate: (date: Date) => void,
+  getDate: () => Date;
+  setDate: (date: Date) => void;
 }
 
 const InternalCalendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProps> = (props, ref) => {
-  const {
-    value,
-    defaultValue,
-    onChange,
-  } = props;
+  const { value, defaultValue, onChange } = props;
 
-  const [date, setDate] =  useControllableValue(props,{
+  const [date, setDate] = useControllableValue(props, {
     defaultValue: new Date()
   });
 
@@ -30,9 +26,9 @@ const InternalCalendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProp
         return date;
       },
       setDate(date: Date) {
-        setDate(date)
+        setDate(date);
       }
-    }
+    };
   });
 
   const handlePrevMonth = () => {
@@ -43,27 +39,14 @@ const InternalCalendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProp
     setDate(new Date(date.getFullYear(), date.getMonth() + 1, 1));
   };
 
-  const monthNames = [
-    '一月',
-    '二月',
-    '三月',
-    '四月',
-    '五月',
-    '六月',
-    '七月',
-    '八月',
-    '九月',
-    '十月',
-    '十一月',
-    '十二月',
-  ];
+  const monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
 
   const daysOfMonth = (year: number, month: number) => {
     return new Date(year, month + 1, 0).getDate();
   };
 
   const firstDayOfMonth = (year: number, month: number) => {
-    return new Date(year, month, 1).getDay();
+    return new Date(year, month, 1).getDay() - 1;
   };
 
   const renderDates = () => {
@@ -79,13 +62,23 @@ const InternalCalendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProp
     for (let i = 1; i <= daysCount; i++) {
       const clickHandler = () => {
         const curDate = new Date(date.getFullYear(), date.getMonth(), i);
+        console.log("curDate.getDate() :>> ", curDate.getDate());
         setDate(curDate);
-      }
-    
-      if(i === date.getDate()) {
-        days.push(<div key={i} className="day selected" onClick={() => clickHandler()}>{i}</div>);  
+        onChange?.(curDate);
+      };
+      console.log("date.getDate() :>> ", date.getDate());
+      if (i === date.getDate()) {
+        days.push(
+          <div key={i} className="day selected" onClick={() => clickHandler()}>
+            {i}
+          </div>
+        );
       } else {
-        days.push(<div key={i} className="day" onClick={() => clickHandler()}>{i}</div>);
+        days.push(
+          <div key={i} className="day" onClick={() => clickHandler()}>
+            {i}
+          </div>
+        );
       }
     }
 
@@ -96,22 +89,24 @@ const InternalCalendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProp
     <div className="calendar">
       <div className="header">
         <button onClick={handlePrevMonth}>&lt;</button>
-        <div>{date.getFullYear()}年{monthNames[date.getMonth()]}</div>
+        <div>
+          {date.getFullYear()}年{monthNames[date.getMonth()]}
+        </div>
         <button onClick={handleNextMonth}>&gt;</button>
       </div>
       <div className="days">
-        <div className="day">日</div>
         <div className="day">一</div>
         <div className="day">二</div>
         <div className="day">三</div>
         <div className="day">四</div>
         <div className="day">五</div>
         <div className="day">六</div>
+        <div className="day">日</div>
         {renderDates()}
       </div>
     </div>
   );
-}
+};
 
 const Calendar = React.forwardRef(InternalCalendar);
 
@@ -123,10 +118,27 @@ function Test() {
   //     alert(newDate.toLocaleDateString());
   // }}></Calendar>
 
-  return <Calendar defaultValue={new Date()} onChange={(newDate) => {
-      alert(newDate.toLocaleDateString());
-  }}></Calendar>
-
+  return (
+    <>
+      <Calendar
+        onChange={newDate => {
+          console.log("onChange1 :>> ", newDate.toLocaleDateString());
+        }}
+      ></Calendar>
+      <Calendar
+        defaultValue={new Date("2025-3-1")}
+        onChange={newDate => {
+          console.log("onChange2 :>> ", newDate.toLocaleDateString());
+        }}
+      ></Calendar>
+      <Calendar
+        defaultValue={new Date("2025-4-1")}
+        onChange={newDate => {
+          console.log("onChange3 :>> ", newDate.toLocaleDateString());
+        }}
+      ></Calendar>
+    </>
+  );
 }
 
 export default Test;

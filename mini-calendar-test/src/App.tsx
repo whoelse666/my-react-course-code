@@ -64,7 +64,7 @@ const InternalCalendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProp
         const curDate = new Date(date.getFullYear(), date.getMonth(), i);
         console.log("curDate.getDate() :>> ", curDate.getDate());
         setDate(curDate);
-        onChange?.(curDate);
+        // onChange?.(curDate);
       };
       console.log("date.getDate() :>> ", date.getDate());
       if (i === date.getDate()) {
@@ -111,16 +111,37 @@ const InternalCalendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProp
 const Calendar = React.forwardRef(InternalCalendar);
 
 function Test() {
-  // const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date());
+  // const calendarRef = useRef<CalendarRef>(null);
 
-  // return <Calendar value={date} onChange={(newDate) => {
-  //     setDate(newDate);
-  //     alert(newDate.toLocaleDateString());
-  // }}></Calendar>
+  // useEffect(() => {
+  //   console.log(calendarRef.current?.getDate().toLocaleDateString());
+  //   setTimeout(() => {
+  //     calendarRef.current?.setDate(new Date(2024, 3, 1));
+  //   }, 3000);
+  // }, []);
+
+  // return (
+  //   <Calendar
+  //     value={date}
+  //     ref={calendarRef}
+  //     onChange={newDate => {
+  //       setDate(newDate);
+  //       console.log(newDate.toLocaleDateString());
+  //     }}
+  //   ></Calendar>
+  // );
 
   return (
     <>
       <Calendar
+        value={date}
+        onChange={newDate => {
+          setDate(newDate);
+          console.log(newDate.toLocaleDateString());
+        }}
+      ></Calendar>
+      {/* <Calendar
         onChange={newDate => {
           console.log("onChange1 :>> ", newDate.toLocaleDateString());
         }}
@@ -137,6 +158,7 @@ function Test() {
           console.log("onChange3 :>> ", newDate.toLocaleDateString());
         }}
       ></Calendar>
+    */}
     </>
   );
 }

@@ -1,5 +1,6 @@
 .DS_Store
 
+
 *-lock.json
 yarn-*
 *-lock.yaml
@@ -7,3 +8,4 @@ yarn-*
 
 node_modules/
 dist/
+.history

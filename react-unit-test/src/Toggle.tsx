@@ -5,9 +5,9 @@ function Toggle() {
     const [status, setStatus] = useState(false);
 
     const clickHandler = useCallback(() => {
-        // setTimeout(() => {
+        setTimeout(() => {
             setStatus((prevStatus) => !prevStatus);
-        // }, 2000);
+        }, 2000);
     }, []);
 
     return (

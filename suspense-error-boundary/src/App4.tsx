@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { ErrorBoundary } from "react-error-boundary";
+import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 
 function Bbb() {
     useEffect(() => {
@@ -12,12 +12,12 @@ function Aaa() {
     return <Bbb></Bbb>
 }
 
-const fallbackRender = ({ error }) => {
+const fallbackRender = ({ error }: FallbackProps) => {
     return <div>
         <p>出错了：</p>
         <div>{error.message}</div>
     </div>
-}}
+}
 
 export default function App() {
     return <ErrorBoundary fallbackRender={fallbackRender}>

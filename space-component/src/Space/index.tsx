@@ -27,8 +27,8 @@ function getNumberSize(size: SizeType) {
 
 const Space: React.FC<SpaceProps> = props => {
 
-  const { space } = React.useContext(ConfigContext);
-
+  const { space,  } = React.useContext(ConfigContext);
+console.log('space :>> ', space);
   const {
     className,
     style,
@@ -56,7 +56,6 @@ const Space: React.FC<SpaceProps> = props => {
   const nodes = childNodes.map((child: any, i) => {
 
     const key = child && child.key || `space-item-${i}`;
-
     return <>
         <div className='space-item' key={key}>
             {child}

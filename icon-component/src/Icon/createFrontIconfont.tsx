@@ -4,14 +4,10 @@ import { Icon, IconProps } from './';
 const loaded = new Set<string>();
 
 export function createFromIconfont(scriptUrl: string) {
-  if (
-    typeof scriptUrl === 'string'
-    && scriptUrl.length
-    && !loaded.has(scriptUrl)
-  ) {
-    const script = document.createElement('script');
-    script.setAttribute('src', scriptUrl);
-    script.setAttribute('data-namespace', scriptUrl);
+  if (typeof scriptUrl === "string" && scriptUrl.length && !loaded.has(scriptUrl)) {
+    const script = document.createElement("script");
+    script.setAttribute("src", scriptUrl);
+    script.setAttribute("data-namespace", scriptUrl);
     document.body.appendChild(script);
 
     loaded.add(scriptUrl);
@@ -22,7 +18,7 @@ export function createFromIconfont(scriptUrl: string) {
 
     return (
       <Icon {...rest} ref={ref}>
-        { type ? <use xlinkHref={`#${type}`} /> : null}
+        {type ? <use xlinkHref={`#${type}`} /> : null}
       </Icon>
     );
   });

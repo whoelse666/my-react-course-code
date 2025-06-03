@@ -92,7 +92,9 @@ const InternalCalendar: React.ForwardRefRenderFunction<CalendarRef, CalendarProp
         <div>
           {date.getFullYear()}年{monthNames[date.getMonth()]}
         </div>
-        <button onClick={handleNextMonth}>&gt;</button>
+        <button  onClick={handleNextMonth}>
+          &gt;
+        </button>
       </div>
       <div className="days">
         <div className="day">一</div>
@@ -112,25 +114,25 @@ const Calendar = React.forwardRef(InternalCalendar);
 
 function Test() {
   const [date, setDate] = useState(new Date());
-  // const calendarRef = useRef<CalendarRef>(null);
+  const calendarRef = useRef<CalendarRef>(null);
 
-  // useEffect(() => {
-  //   console.log(calendarRef.current?.getDate().toLocaleDateString());
-  //   setTimeout(() => {
-  //     calendarRef.current?.setDate(new Date(2024, 3, 1));
-  //   }, 3000);
-  // }, []);
+  useEffect(() => {
+    console.log(calendarRef.current?.getDate().toLocaleDateString());
+    setTimeout(() => {
+      calendarRef.current?.setDate(new Date(2024, 3, 1));
+    }, 3000);
+  }, []);
 
-  // return (
-  //   <Calendar
-  //     value={date}
-  //     ref={calendarRef}
-  //     onChange={newDate => {
-  //       setDate(newDate);
-  //       console.log(newDate.toLocaleDateString());
-  //     }}
-  //   ></Calendar>
-  // );
+  return (
+    <Calendar
+      value={date}
+      ref={calendarRef}
+      onChange={newDate => {
+        setDate(newDate);
+        console.log(newDate.toLocaleDateString());
+      }}
+    ></Calendar>
+  );
 
   return (
     <>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import {useMountedState} from 'react-use';
+// import {useMountedState} from 'react-use';
+import { useMountedState } from "./useHooks_my";
 
 const App = () => {
     const isMounted = useMountedState();

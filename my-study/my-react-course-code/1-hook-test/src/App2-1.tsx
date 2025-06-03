@@ -8,7 +8,6 @@ function App() {
     const timer = setInterval(() => {
       console.log(num);
     }, 1000);
-
     return () => {
       console.log('clean up')
       clearInterval(timer);

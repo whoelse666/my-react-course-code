@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { useCookie } from "react-use";
+// import { useCookie } from "react-use";
+import { useCookie } from "./useHooks_my";
 
 const App = () => {
   const [value, updateCookie, deleteCookie] = useCookie("guang");

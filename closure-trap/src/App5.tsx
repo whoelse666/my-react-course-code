@@ -6,7 +6,6 @@ interface Action {
 }
 
 function reducer(state: number, action: Action) {
-
     switch(action.type) {
         case 'add':
             return state + action.num

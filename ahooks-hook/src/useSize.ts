@@ -20,6 +20,7 @@ function useSize(targetRef: RefObject<HTMLElement>): Size | undefined {
         }
 
         const resizeObserver = new ResizeObserver((entries) => {
+            console.log("entries", entries);
             entries.forEach((entry) => {
                 const { clientWidth, clientHeight } = entry.target;
                 setState({ width: clientWidth, height: clientHeight });

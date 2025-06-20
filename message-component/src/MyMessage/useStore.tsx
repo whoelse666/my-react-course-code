@@ -19,8 +19,6 @@ function useStore(defaultPosition: Position) {
     add: (messageProps: MessageProps) => {
       const id = getId(messageProps);
       setMessageList(preState => {
-        console.log("preState :>> ", preState);
-        console.log("messageProps :>> ", messageProps);
         if (messageProps?.id) {
           const position = getMessagePosition(preState, messageProps.id);
           if (position) return preState;

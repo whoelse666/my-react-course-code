@@ -38,53 +38,60 @@ export interface MessageRef {
 }
 
 export const MessageProvider = forwardRef<MessageRef, {}>((props, ref) => {
+  const { messageList, add, update, remove, clearAll } = useStore("top");
 
-    const { messageList, add, update, remove, clearAll } = useStore('top');
+  /* 
+  检查 ref 对象是否具有 current 属性
+  in 操作符用于检查属性是否存在
+  ! 非空断言操作符告诉 TypeScript 编译器 ref 一定不为 null/undefined
+  */
+  if ("current" in ref!) {
+    console.log('ref.current :>> ', ref.current);
+    ref.current = {
+      add,
+      update,
+      remove,
+      clearAll
+    };
+  }
+  // useImperativeHandle(ref, () => {
+  //     return {
+  //         add,
+  //         update,
+  //         remove,
+  //         clearAll
+  //     }
+  // }, [])
 
-    if('current' in ref!) {
-        ref.current = {
-            add,
-            update,
-            remove,
-            clearAll
-        }
-    }
-    // useImperativeHandle(ref, () => {
-    //     return {
-    //         add,
-    //         update,
-    //         remove,
-    //         clearAll
-    //     }
-    // }, [])
+  const positions = Object.keys(messageList) as Position[];
 
-    const positions = Object.keys(messageList) as Position[];
-
-    const messageWrapper = <div className="message-wrapper">
-        {
-            positions.map(direction => {
-                return <div className={`message-wrapper-${direction}`} key={direction}>
-                    <TransitionGroup>
-                        {
-                            messageList[direction].map(item => {
-                                return  <CSSTransition key={item.id} timeout={1000} classNames='message'>
-                                    <MessageItem onClose={remove} {...item}></MessageItem>
-                                </CSSTransition>
-                            })
-                        }
-                    </TransitionGroup>
-                </div>
-            })
-        }
+  const messageWrapper = (
+    <div className="message-wrapper">
+      {positions.map(direction => {
+        return (
+          <div className={`message-wrapper-${direction}`} key={direction}>
+            <TransitionGroup>
+              {messageList[direction].map(item => {
+                return (
+                  <CSSTransition key={item.id} timeout={1000} classNames="message">
+                    <MessageItem onClose={remove} {...item}></MessageItem>
+                  </CSSTransition>
+                );
+              })}
+            </TransitionGroup>
+          </div>
+        );
+      })}
     </div>
+  );
 
-    const el = useMemo(() => {
-        const el = document.createElement('div');
-        el.className = `wrapper`;
+  const el = useMemo(() => {
+    const el = document.createElement("div");
+    el.className = `wrapper`;
 
-        document.body.appendChild(el);
-        return el;
-    }, []);
+    document.body.appendChild(el);
+    return el;
+  }, []);
 
-    return createPortal(messageWrapper, el);
+  return createPortal(messageWrapper, el);
 })

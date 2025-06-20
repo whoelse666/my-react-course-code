@@ -1,18 +1,21 @@
-import { ConfigProvider } from "./Message/ConfigProvider";
-import { useMessage } from "./Message/useMessage";
-
+import { useMessage } from "./MyMessage/useMessage";
+import { ConfigProvider } from "./MyMessage/ConfigProvider";
 function Aaa() {
   const message = useMessage();
-
-  return <button onClick={() =>{
-    message.add({
-      content:'请求成功'
-    })
-  }}>成功</button>
+  return (
+    <button
+      onClick={() => {
+        message.add({
+          content: "请求成功"
+        });
+      }}
+    >
+      成功
+    </button>
+  );
 }
 
 function App() {
-
   return (
     <ConfigProvider>
       <div>

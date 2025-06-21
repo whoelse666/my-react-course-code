@@ -23,10 +23,7 @@ function useStore(defaultPosition: Position) {
           const position = getMessagePosition(preState, messageProps.id);
           if (position) return preState;
         }
-
         const position = messageProps.position || defaultPosition;
-        console.log("position :>> ", position);
-
         const isTop = position.includes("top");
         const messages = isTop ? [{ ...messageProps, id }, ...(preState[position] ?? [])] : [...(preState[position] ?? []), { ...messageProps, id }];
 
@@ -55,11 +52,9 @@ function useStore(defaultPosition: Position) {
         return nextState;
       });
     },
-
     remove: (id: number) => {
       setMessageList(prevState => {
         const position = getMessagePosition(prevState, id);
-
         if (!position) return prevState;
         return {
           ...prevState,

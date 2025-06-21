@@ -1,5 +1,7 @@
-import { useMessage } from "./MyMessage/useMessage";
+import { useState } from "react";
 import { ConfigProvider } from "./MyMessage/ConfigProvider";
+import { useMessage } from "./MyMessage/useMessage";
+
 function Aaa() {
   const message = useMessage();
   return (
@@ -14,12 +16,13 @@ function Aaa() {
     </button>
   );
 }
-
 function App() {
+  const [count, setCount] = useState(0);
   return (
     <ConfigProvider>
       <div>
-        <Aaa></Aaa>
+        <p> App Component {count}</p>
+        <Aaa />
       </div>
     </ConfigProvider>
   );

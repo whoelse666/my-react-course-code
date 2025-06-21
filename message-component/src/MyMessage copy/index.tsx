@@ -1,8 +1,10 @@
-import { CSSProperties, FC, forwardRef, ReactNode, useMemo, PropsWithChildren, RefObject, createContext, useRef } from "react";
-import "./index.scss";
-import { useUtils } from "./useUtils";
+import { CSSProperties, FC, forwardRef, ReactNode, useMemo } from "react";
+import useStore from "./useStore";
+import { useTimer } from "./useTimer";
 import { createPortal } from "react-dom";
+import "./index.scss";
 export type Position = "top" | "bottom";
+
 export interface MessageProps {
   style?: CSSProperties;
   className?: string | string[];
@@ -12,7 +14,6 @@ export interface MessageProps {
   id?: number;
   position?: Position;
 }
-
 export interface MessageRef {
   add: (messageProps: MessageProps) => number;
   remove: (id: number) => void;
@@ -20,24 +21,38 @@ export interface MessageRef {
   clearAll: () => void;
 }
 
-export const MessageProvider = forwardRef<MessageRef, {}>((props, ref) => {
-  console.log("MessageProvider-props :>> ", props);
-  console.log("MessageProvider-ref :>> ", ref);
+const MessageComponent: FC<MessageProps> = item => {
+  const { onMouseEnter, onMouseLeave } = useTimer({
+    id: item.id!,
+    duration: item.duration,
+    remove: item.onClose!
+  });
 
-  const { add, remove, update, clearAll } = useUtils();
+  return (
+    <div className="message-item" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      {item.content}
+    </div>
+  );
+};
+
+export const MessageProvider = forwardRef<MessageRef, {}>((props, ref) => {
+  const { messageList, add, update, remove, clearAll } = useStore("top");
 
   if ("current" in ref!) {
     ref.current = {
       add,
-      remove,
       update,
+      remove,
       clearAll
     };
   }
+
+  //   获取消息列表  位置数组
+  const positions = Object.keys(messageList) as Position[];
+
   const messageWrapper = (
     <div className="message-wrapper">
-      messageWrapper
-      {/* {positions &&
+      {positions &&
         positions.map(direction => {
           return (
             <div key={direction} className={`message-wrapper-${direction}`}>
@@ -46,15 +61,16 @@ export const MessageProvider = forwardRef<MessageRef, {}>((props, ref) => {
               })}
             </div>
           );
-        })} */}
+        })}
     </div>
   );
+
   const el = useMemo(() => {
     const el = document.createElement("div");
     el.className = `wrapper`;
     document.body.appendChild(el);
     return el;
   }, []);
-
-  return createPortal(messageWrapper, el);
+ 
+ return createPortal(messageWrapper, el);
 });

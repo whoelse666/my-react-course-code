@@ -22,6 +22,7 @@ function useStore(defaultPosition: Position) {
         console.log("preState :>> ", preState);
         console.log("messageProps :>> ", messageProps);
         if (messageProps?.id) {
+          /* 如果有id  并且   通过id 在 preState在 有message，就拦截 */
           const position = getMessagePosition(preState, messageProps.id);
           if (position) return preState;
         }

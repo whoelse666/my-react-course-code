@@ -8,7 +8,9 @@ function Aaa() {
     <button
       onClick={() => {
         message.add({
-          content: "请求成功"
+          id: 99,
+          content: "请求成功",
+          position: "bottom"
         });
       }}
     >

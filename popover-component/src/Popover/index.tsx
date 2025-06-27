@@ -45,22 +45,18 @@ export default function Popover(props: PopoverProps) {
     document.body.appendChild(dom);
     return dom;
   }, []);
-  const showDom = (
-    <>
-      {isOpen && (
-        <div ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()}>
-          {content}
-          <FloatingArrow ref={arrowRef} context={context} fill="#fff" stroke="#000" strokeWidth={1} />
-        </div>
-      )}
-    </>
+  const floating = isOpen && (
+    <div ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()}>
+      {content}
+      <FloatingArrow ref={arrowRef} context={context} fill="#fff" stroke="#000" strokeWidth={1} />
+    </div>
   );
   return (
     <>
       <span className={className} ref={refs.setReference} style={style} {...getReferenceProps()}>
         {children}
       </span>
-      {createPortal(showDom, el)}
+      {createPortal(floating, el)}
     </>
   );
 }

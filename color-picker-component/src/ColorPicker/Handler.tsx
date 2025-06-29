@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 
-export default function Handler({ color = "pink", size = "default" }) {
+export default function Handler({ color = "white", size = "default" }) {
   return (
     <div
       className={classNames(`color-picker-panel-palette-handler`, {
@@ -9,6 +9,7 @@ export default function Handler({ color = "pink", size = "default" }) {
       })}
       style={{
         backgroundColor: color
+        // backgroundColor: 'transparent'
       }}
     ></div>
   );

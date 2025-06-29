@@ -1,7 +1,7 @@
 import React, { ChangeEventHandler, useState } from "react";
 import "./App.css";
-import ColorPickerPanel from "./ColorPicker/ColorPickerPanel";
-import { Color } from "./ColorPicker/color";
+import ColorPickerPanel from "./ColorPicker1/ColorPickerPanel";
+import { Color } from "./ColorPicker1/color";
 
 function App() {
   const [color, setColor] = useState<Color>(new Color("rgb(166,57,255)"));

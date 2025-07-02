@@ -1,22 +1,21 @@
-import React, { FC, useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { Button, Popover } from 'antd';
-import { Mask } from './Mask'
-import { TooltipPlacement } from 'antd/es/tooltip';
+import React, { FC, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { Button, Popover } from "antd";
+import { Mask } from "./Mask";
+import { TooltipPlacement } from "antd/es/tooltip";
 
 export interface OnBoardingStepConfig {
-    selector: () => HTMLElement | null;
-  
-    placement?: TooltipPlacement;
-  
-    renderContent?: (currentStep: number) => React.ReactNode;
-  
-    beforeForward?: (currentStep: number) => void;
-  
-    beforeBack?: (currentStep: number) => void;
+  selector: () => HTMLElement | null;
+
+  placement?: TooltipPlacement;
+
+  renderContent?: () => React.ReactNode;
+
+  beforeForward?: (currentStep: number) => void;
+
+  beforeBack?: (currentStep: number) => void;
 }
 
-  
 export interface OnBoardingProps {
   step?: number;
 
@@ -27,13 +26,8 @@ export interface OnBoardingProps {
   onStepsEnd?: () => void;
 }
 
-export const OnBoarding:FC<OnBoardingProps> = (props) => {
-  const {
-    step = 0,
-    steps,
-    onStepsEnd,
-    getContainer
-  } = props;
+export const OnBoarding: FC<OnBoardingProps> = props => {
+  const { step = 0, steps, onStepsEnd, getContainer } = props;
 
   const [currentStep, setCurrentStep] = useState<number>(0);
 
@@ -77,67 +71,74 @@ export const OnBoarding:FC<OnBoardingProps> = (props) => {
 
   const renderPopover = (wrapper: React.ReactNode) => {
     const config = getCurrentStep();
-
+    console.log("config :>> ", config);
     if (!config) {
       return wrapper;
     }
 
     const { renderContent } = config;
-    const content = renderContent ? renderContent(currentStep) : null;
+    const content = renderContent ? renderContent() : null;
 
     const operation = (
-      <div className={'onboarding-operation'}>
-        {
-          currentStep !== 0 && 
-            <Button
-                className={'back'}
-                onClick={() => back()}>
-                {'上一步'}
-            </Button>
-        }
-        <Button
-          className={'forward'}
-          type={'primary'}
-          onClick={() => forward()}>
-          {currentStep === steps.length - 1 ? '我知道了' : '下一步'}
+      <div className={"onboarding-operation"}>
+        {currentStep !== 0 && (
+          <Button className={"back"} onClick={() => back()}>
+            {"上一步"}
+          </Button>
+        )}
+        <Button className={"forward"} type={"primary"} onClick={() => forward()}>
+          {currentStep === steps.length - 1 ? "我知道了" : "下一步"}
         </Button>
       </div>
     );
 
-    return (
-      isMaskMoving ? wrapper : <Popover
-        content={<div>
+    return isMaskMoving ? (
+      wrapper
+    ) : (
+      <Popover
+        content={
+          <div>
             {content}
             {operation}
-        </div>}
+          </div>
+        }
         open={true}
-        placement={getCurrentStep()?.placement}>
+        placement={getCurrentStep()?.placement}
+      >
         {wrapper}
       </Popover>
     );
   };
 
+  /* 
+  第一次渲染的时候，元素是 null，触发重新渲染之后，就会渲染下面的 Mask 了：
+  注意，我们要给元素加上引导，那得元素渲染完才行。
+  所以这里加个 setState，在 useEffect 里执行。
+  效果就是在 dom 渲染完之后，触发重新渲染，从而渲染这个 OnBoarding 组件：
+  */
   const [, setRenderTick] = useState<number>(0);
 
   useEffect(() => {
-    setRenderTick(1)    
+    setRenderTick(1);
   }, []);
-  
-  if(!currentSelectedElement || done) {
+
+  if (!currentSelectedElement || done) {
     return null;
   }
 
-  const mask = <Mask
-    onAnimationStart={() => {
+  const mask = (
+    <Mask
+      onAnimationStart={() => {
         setIsMaskMoving(true);
-    }}
-    onAnimationEnd={() => {
+      }}
+      onAnimationEnd={() => {
         setIsMaskMoving(false);
-    }}
-    container={currentContainerElement}
-    element={currentSelectedElement}
-    renderMaskContent={(wrapper) => renderPopover(wrapper)}
-  />;
+      }}
+      container={currentContainerElement}
+      element={currentSelectedElement}
+      renderMaskContent={wrapper => renderPopover(wrapper)}
+    />
+  );
 
   return createPortal(mask, currentContainerElement);
-}
+};

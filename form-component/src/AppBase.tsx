@@ -1,32 +1,42 @@
 import { Button, Checkbox, Input } from "antd";
 import Form from "./Form/index";
+import { useRef } from "react";
+import { FormRefApi } from "./Form/Form";
 
-import { useState } from "react";
 const Basic: React.FC = () => {
-  const [values, setValues] = useState({});
-
   const onFinish = (values: any) => {
-    console.log("onFinish :>> ", values);
+    console.log("Success:", values);
   };
-  const onFinishFailed = (errors: any) => {
-    console.log("onFinishFailed :>> ", errors);
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
   };
-  const validateRegister = (errors: any) => {
-    console.log("onFinishFailed :>> ", errors);
-  };
+
+  const form = useRef<FormRefApi>(null);
+
   return (
     <>
-      <Button type="primary" onClick={() => {}}>
+      <Button
+        type="primary"
+        onClick={() => {
+          console.log(form.current?.getFieldsValue());
+        }}
+      >
         打印表单值
       </Button>
 
-      <Button type="primary" onClick={() => {}}>
+      <Button
+        type="primary"
+        onClick={() => {
+          form.current?.setFieldsValue({
+            username: "东东东"
+          });
+        }}
+      >
         设置表单值
       </Button>
 
-      <hr />
-
-      <Form onFinish={onFinish} onFinishFailed={onFinishFailed} initialValues={{ remember: true, username: "神说要有光", password: 111111 }}>
+      <Form ref={form} initialValues={{ remember: true, username: "神说要有光" }} onFinish={onFinish} onFinishFailed={onFinishFailed}>
         <Form.Item
           label="Username"
           name="username"
@@ -35,18 +45,23 @@ const Basic: React.FC = () => {
             { max: 6, message: "长度不能大于 6" }
           ]}
         >
-          <Input></Input>
+          <Input />
         </Form.Item>
+
         <Form.Item label="Password" name="password" rules={[{ required: true, message: "请输入密码!" }]}>
           <Input.TextArea />
         </Form.Item>
+
         <Form.Item name="remember" valuePropName="checked">
           <Checkbox>记住我</Checkbox>
         </Form.Item>
+
         <Form.Item>
-          <Button type="link" htmlType="submit">
-            提交
-          </Button>
+          <div>
+            <Button type="primary" htmlType="submit">
+              登录
+            </Button>
+          </div>
         </Form.Item>
       </Form>
     </>
